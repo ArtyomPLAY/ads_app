@@ -1,7 +1,7 @@
 <template>
 <v-container>
   <v-layout row>
-    <v-flex xs12 sm6 offset-sm3>
+    <v-flex v-if="!loading && orders.length !== 0" xs12 sm6 offset-sm3>
       <h1 class="text--secondary mb-2">Orders</h1>
       <v-list
           subheader
@@ -11,14 +11,6 @@
           v-for="order in orders"
           :key="order.id"
           >
-            <v-list-tile-action>
-              <v-checkbox
-              color="success"
-              v-model="order.done"
-              :disabled="order.done"
-              @change="markDone(order)"
-              ></v-checkbox>
-            </v-list-tile-action>
 
             <v-list-tile-content>
               <v-list-tile-title>{{order.name}}</v-list-tile-title>
@@ -32,6 +24,23 @@
           </v-list-tile>
         </v-list>
     </v-flex>
+    <v-container v-else-if="loading">
+      <v-layout row>
+        <v-flex xs12 class="text-xs-center pt-5">
+          <v-progress-circular 
+          :size="100"
+          :width="4"
+          color="primary"
+          indeterminate>
+          </v-progress-circular>
+        </v-flex>
+      </v-layout>
+    </v-container>
+    <v-flex v-else xs12 class="xs-text-center">
+      <h1 class="text--secondary">
+        You have no orders yet!
+      </h1>
+    </v-flex>
   </v-layout>
 </v-container>
 </template>
@@ -40,28 +49,28 @@
 export default {
   data () {
     return {
-      orders: [
-        {
-          id: '3214',
-          name: 'Bought audi rs5 yesterday',
-          phone: '8-827-2764-27',
-          adId: '123',
-          done: true
-        },
-        {
-          id: '312',
-          name: 'Bought mers-amg sls tmrw',
-          phone: '8-827-2764-27',
-          adId: '1234',
-          done: false
-        }
-      ]
+    }
+  },
+  computed: {
+    loading () {
+      return this.$store.getters.loading
+    },
+    orders () {
+      return this.$store.getters.orders
     }
   },
   methods: {
     markDone (order) {
-      order.done = true
+      this.$store.dispatch('markOrderDone', orderId)
+        .then(() => {
+          order.done = true
+        })
+        .catch(() => {})
+      
     }
+  },
+  created () {
+    
   }
 }
 </script>

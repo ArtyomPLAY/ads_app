@@ -24,7 +24,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn depressed 
-              class="info"
+              class="secondary"
               :to="'/ad/'+ad.id"
               >Open</v-btn>
             </v-card-actions>

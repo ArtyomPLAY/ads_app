@@ -5,7 +5,8 @@
   v-model="modal"
   >
     <v-btn
-    class="warning mr-2"
+    color="warning"
+    class="mr-2"
     flat
     slot="activator"
     >Edit</v-btn>
